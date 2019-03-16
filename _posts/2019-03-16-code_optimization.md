@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "代码优化--使用矩阵运算代替循环"
+title: 代码优化--使用矩阵运算代替循环
 mathjax: true
 date: 2019-03-16
-categories: 算法
+categories: algorithm
 tag: 矩阵，优化
 ---   
 
@@ -13,15 +13,16 @@ tag: 矩阵，优化
 
 大概是这个意思（图1）：
 
-![](/public/daimayouhua/1.png)
-<center>图1</center>
-
+<div align="center">
+<img src="/public/code_optimization/1.png" height="80%" width="80%">
+</div>
+<center> 图1 </center>
 <br/>
+
+<!-- more -->
 
 图1中黄色边框、淡蓝色背景为所需的整个视场，相机依次拍摄了A、B、C、D、E、F六张小图来覆盖整个区域。  
 项目中，为了覆盖整个视场区域，一共拍摄了96张小图，每张小图的高为$h=912$，宽为$w=1386$。
-
-<!-- more -->
 
 整个项目共两个需求：
 1. 将所有的小图拼接为一份大图，来还原完整的视场图片
@@ -33,7 +34,9 @@ tag: 矩阵，优化
 
 > PS：本文不会介绍拼接方法，只涉及代码优化部分。
 
-## 需求一：小图拼接以还原完整视场
+## 算法优化
+
+### 需求一：小图拼接以还原完整视场
 
 现在我们需要把所有的小图拼接成一张大图，来还原一个完成的视场区域。
 
@@ -50,9 +53,10 @@ tag: 矩阵，优化
 > $(u1, v1, 1)$是二维坐标的[齐次形式](https://baike.baidu.com/item/%E9%BD%90%E6%AC%A1%E5%9D%90%E6%A0%87/511284?fr=aladdin)，主要是为了进行矩阵运算。
 
 
-![](/public/daimayouhua/2.png)
-<center>图2</center>
-
+<div align="center">
+<img src="/public/code_optimization/2.png" height="100%" width="100%">
+</div>
+<center> 图2 </center>
 <br/>
 
 $P$点坐标转换为$P'$点坐标，由以下公式给出（参考[相机标定原理](https://www.cnblogs.com/Jessica-jie/p/6596450.html)，[根据经纬度计算距离](https://www.cnblogs.com/softfair/p/distance_of_two_latitude_and_longitude_points.html)和[姿态角](https://baike.baidu.com/item/%E5%81%8F%E8%88%AA%E8%A7%92/4783835?fr=aladdin)）：
@@ -73,9 +77,10 @@ v_1 \\
 
 假设以A为base_img，拼接后的大图应该为：
 
-![center](/public/daimayouhua/3.png)
-<center>图3</center>
-
+<div align="center">
+<img src="/public/code_optimization/3.png" height="80%" width="80%">
+</div>
+<center> 图3 </center>
 <br/>
 
 **坐标转换**
@@ -241,16 +246,17 @@ canvas[uv2[1].reshape(w, h).T, uv2[0].reshape(w, h).T, :] = each_img
 
 不得不感叹矩阵运算的优美。
 
-## 需求二：像素点匹配
+### 需求二：像素点匹配
 
 得到全景大图后，又接到一个新需求：随机在大图上进行点击，需要给出该点的来源图，以及来源点的坐标。
 
 例如，大图上有一点$M$，坐标为$(u,v)$，我们需要找出来源图为B和E，以及来源点坐标为B图像坐标系下的$(u_b,v_b)$，以及E图像坐标系下的$E(u_e,v_e)$（如图4）。
 
 
-![center](/public/daimayouhua/4.png)
-<center>图4</center>
-
+<div align="center">
+<img src="/public/code_optimization/4.png" height="100%" width="100%">
+</div>
+<center> 图4 </center>
 <br/>
 
 接到新需求后，我会在拼接大图时，保存所有小图转换后的坐标，即：
