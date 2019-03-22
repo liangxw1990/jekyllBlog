@@ -2,7 +2,7 @@
 layout: post
 title: 常用语法（持续更新）
 date: 2019-03-21
-categories: language tricks
+categories: language-tricks
 tags: Docker
 ---
 
@@ -11,7 +11,7 @@ tags: Docker
 
 ### 常用命令
 
-```python
+```bash
 # 列出本地镜像
 docker images
 # 列出容器
@@ -25,6 +25,8 @@ docker push dockerliang/myubuntu
 docker pull ubuntu:16.04
 # 运行
 docker run -it --rm ubuntu:16.04 bash
+# 删除
+docker rmi IMAGE_ID
 
 # 镜像重命名
 sudo docker tag dianchi_train:0413 caffe2_template:train
@@ -36,6 +38,19 @@ sudo docker exec -it 7eddfd /bin/bash
 # 保存
 sudo docker save 6bde8d8dbb2d > leqidianchi_v3.tar
 sudo docker load --input leqidianchi_v3.tar
+```
+
+<!-- more -->
+
+### 修改保存镜像
+
+```bash
+# 1. 进入镜像：
+sudo docker run -it ubuntu:16.04 /bin/bash
+# 2. 进行改动，记住id
+# 3. 退出
+# 4. 保存
+sudo docker commit -m “some commit” bdd5b0be0713 ubuntu_new:16.04
 ```
 
 ### 运行脚本示例
@@ -51,17 +66,6 @@ hongpu/ali-xqx-gpu:v1.0 \
 /bin/bash /ali-xqx-code/run.sh
 ```
 
-### 修改保存镜像
-
-```python
-# 1. 进入镜像：
-sudo docker run -it ubuntu:16.04 /bin/bash
-# 2. 进行改动，记住id
-# 3. 退出
-# 4. 保存
-sudo docker commit -m “some commit” bdd5b0be0713 ubuntu_new:16.04
-```
-
 ### Dockerfile示例
 
 ```python
@@ -72,7 +76,7 @@ RUN pip install --requirement /ali-xqx-code/web_demo_yumi/requirements.txt
 
 ## Git
 
-[参考地址](https://git-scm.com/book/zh/v1/自定义-Git-配置-Git)
+[参考地址](https://git-scm.com/book/zh/v1/自定义-Git-配置-Git)  
 [参考地址](https://code.aliyun.com/help/ssh/README)
 
 ### 配置
